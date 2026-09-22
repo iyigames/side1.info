@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Clean URL Enforcement -->
+  <script>
+    if (window.location.pathname.endsWith('.html')) {
+      var clean = window.location.pathname.replace(/\.html$/, '') + window.location.search + window.location.hash;
+      window.history.replaceState(null, '', clean);
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Terms of Service for VIPRow. Read our terms governing platform usage, external links, disclaimers, and user responsibilities.">
+  <meta name="robots" content="index, follow">
+  <title>Terms of Service - VIPRow</title>
+
+  <!-- Google Fonts: Outfit (Brand & Headings) + Inter (Body & UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Primary Theme Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="site-navbar">
+    <div class="navbar-container">
+
+      <!-- Brand Logo -->
+      <a href="/" class="brand-logo" id="brandLogo">
+        <span class="brand-vip">VIP</span><span class="brand-row">ROW</span>
+      </a>
+
+      <!-- Sports Category Navigation Bar -->
+      <nav class="sports-nav-wrap" aria-label="Sports Categories">
+        <ul class="sports-nav-list" id="sportsNavList">
+          <li><a href="/" class="nav-link-btn">ALL</a></li>
+          <li><a href="/?sport=NFL" class="nav-link-btn">NFL</a></li>
+          <li><a href="/?sport=NBA" class="nav-link-btn">NBA</a></li>
+          <li><a href="/?sport=WNBA" class="nav-link-btn">WNBA</a></li>
+          <li><a href="/?sport=MLB" class="nav-link-btn">MLB</a></li>
+          <li><a href="/?sport=NHL" class="nav-link-btn">NHL</a></li>
+          <li><a href="/?sport=CFL" class="nav-link-btn">CFL</a></li>
+          <li><a href="/?sport=CFB" class="nav-link-btn">CFB</a></li>
+          <li><a href="/?sport=NCAAB" class="nav-link-btn">NCAAB</a></li>
+          <li><a href="/?sport=UFC" class="nav-link-btn">UFC</a></li>
+          <li><a href="/?sport=BOXING" class="nav-link-btn">BOXING</a></li>
+          <li><a href="/?sport=SOCCER" class="nav-link-btn">SOCCER</a></li>
+          <li><a href="/?sport=F1" class="nav-link-btn">F1</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Browse sports categories" aria-expanded="false">
+        <span class="hamburger-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span class="toggle-text">SPORTS</span>
+      </button>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer Overlay -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+      <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop"></div>
+      <div class="mobile-drawer-content">
+        <div class="mobile-drawer-header">
+          <div class="mobile-drawer-title">⚡ Browse All Sports</div>
+          <button type="button" class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Close sports menu">✕</button>
+        </div>
+        <div class="mobile-sports-grid" id="mobileSportsGrid">
+          <a href="/" class="mobile-sport-chip"><span class="chip-icon">🏆</span><span class="chip-label">ALL</span></a>
+          <a href="/?sport=NFL" class="mobile-sport-chip"><span class="chip-icon">🏈</span><span class="chip-label">NFL</span></a>
+          <a href="/?sport=NBA" class="mobile-sport-chip"><span class="chip-icon">🏀</span><span class="chip-label">NBA</span></a>
+          <a href="/?sport=WNBA" class="mobile-sport-chip"><span class="chip-icon">🏀</span><span class="chip-label">WNBA</span></a>
+          <a href="/?sport=MLB" class="mobile-sport-chip"><span class="chip-icon">⚾</span><span class="chip-label">MLB</span></a>
+          <a href="/?sport=NHL" class="mobile-sport-chip"><span class="chip-icon">🏒</span><span class="chip-label">NHL</span></a>
+          <a href="/?sport=CFL" class="mobile-sport-chip"><span class="chip-icon">🏈</span><span class="chip-label">CFL</span></a>
+          <a href="/?sport=CFB" class="mobile-sport-chip"><span class="chip-icon">🏈</span><span class="chip-label">CFB</span></a>
+          <a href="/?sport=NCAAB" class="mobile-sport-chip"><span class="chip-icon">🏀</span><span class="chip-label">NCAAB</span></a>
+          <a href="/?sport=UFC" class="mobile-sport-chip"><span class="chip-icon">🥊</span><span class="chip-label">UFC</span></a>
+          <a href="/?sport=BOXING" class="mobile-sport-chip"><span class="chip-icon">🥊</span><span class="chip-label">BOXING</span></a>
+          <a href="/?sport=SOCCER" class="mobile-sport-chip"><span class="chip-icon">⚽</span><span class="chip-label">SOCCER</span></a>
+          <a href="/?sport=F1" class="mobile-sport-chip"><span class="chip-icon">🏎️</span><span class="chip-label">F1</span></a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Terms of Service Main Content Area -->
+  <main class="legal-page-wrapper">
+    <h1 class="legal-title">Terms of Service</h1>
+    <p class="legal-subtitle">Welcome to our site. Please review these Terms of Service ("Terms") thoroughly before utilizing our platform. By accessing this website, you consent to these Terms. If you disagree with any portion of this agreement, you must stop using the site immediately.</p>
+
+    <div class="legal-body">
+      <h2>1. Description of Service</h2>
+      <p>This platform acts exclusively as a search directory and link aggregator for publicly accessible content. We supply event schedules and route visitors to external streaming sites. We never host, upload, stream, or store media on our own infrastructure. All videos and feeds found via our site are entirely managed and hosted by independent third parties.</p>
+
+      <h2>2. Age Requirements</h2>
+      <p>This website is built exclusively for individuals who are eighteen (18) years old or older. By accessing our platform, you confirm that you meet this age requirement. If you are under 18, you are not permitted to use our services.</p>
+
+      <h2>3. External Links and Third-Party Content</h2>
+      <p>As a link directory, our site will direct you to outside websites, ads, and media sources.</p>
+      <ul>
+        <li><strong>No Endorsement:</strong> Providing a link does not mean we endorse, monitor, or approve the external website.</li>
+        <li><strong>No Liability:</strong> We hold no responsibility for the safety, legality, or accuracy of media hosted on outside servers.</li>
+        <li><strong>User Responsibility:</strong> You visit external platforms entirely at your own risk. We advise utilizing proper digital security (like antivirus tools) and reading the privacy policies of any site you navigate to.</li>
+      </ul>
+
+      <h2>4. Copyright and DMCA Compliance</h2>
+      <p>We highly value intellectual property rights. Because we do not host videos, we cannot delete media from the web. We do, however, fully adhere to the Digital Millennium Copyright Act (DMCA). We will swiftly remove any links from our directory that are proven to route to copyrighted material. To submit a claim, please consult our <a href="/dmca">DMCA Policy</a>.</p>
+
+      <h2>5. Acceptable Use Policy</h2>
+      <p>By accessing this platform, you agree that you will not:</p>
+      <ul>
+        <li>Utilize the site for illegal activities or break any local, national, or global laws.</li>
+        <li>Try to hack or gain unauthorized entry into our databases, servers, or networks.</li>
+        <li>Deploy scrapers, bots, or automated scripts to extract links or data from our pages.</li>
+        <li>Disrupt, overload, or harm the website’s functionality, speed, or security.</li>
+      </ul>
+
+      <h2>6. Disclaimer of Warranties</h2>
+      <p>YOU USE THIS PLATFORM ENTIRELY AT YOUR OWN RISK. OUR DIRECTORY AND SERVICES ARE DELIVERED ON AN "AS IS" AND "AS AVAILABLE" BASIS. To the maximum extent allowed by law, we reject all warranties, whether explicit or implied, including fitness for a specific purpose and non-infringement. We do not guarantee that the website will remain error-free, uninterrupted, fully secure, or free from digital threats.</p>
+
+      <h2>7. Limitation of Liability</h2>
+      <p>Under no circumstances will this website, its creators, or affiliates be held accountable for any direct, indirect, incidental, or consequential damages tied to your use of our service. This protects us from liability regarding lost data, lost profits, or any issues resulting from your ability or inability to utilize our directory and its external links.</p>
+
+      <h2>8. Modifications to the Terms</h2>
+      <p>We retain the right to update, alter, or replace these Terms whenever necessary. Any adjustments will be published here alongside a new revision date. If you continue using the site after these updates go live, it means you accept the revised rules.</p>
+
+      <h2>9. Contact Information</h2>
+      <p>Should you have any questions or require clarification regarding these Terms, please connect with us through our <a href="/contact">Contact Page</a>.</p>
+    </div>
+  </main>
+
+  <!-- Site Footer (Exact Match to Reference Design) -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-container">
+      <p class="footer-disclaimer">
+        <strong>Disclaimer:</strong> VIPRow is a link aggregator for publicly available sports content. We do not host, upload, or produce any media. All streams come from independent third parties, who bear full responsibility for their feeds. Viewers access these external links at their own risk. VIPRow accepts no liability for stream quality, legality, or downtime, but we strictly honor DMCA takedown requests to respect official broadcasters.
+      </p>
+
+      <nav class="footer-links-nav" aria-label="Footer Policies and Contact">
+        <a href="/privacy-policy" class="footer-nav-link">Privacy Policy</a>
+        <span class="footer-link-dot">•</span>
+        <a href="/terms-of-service" class="footer-nav-link" style="color:#ef4444;font-weight:700;">Terms of Service</a>
+        <span class="footer-link-dot">•</span>
+        <a href="/dmca" class="footer-nav-link">DMCA</a>
+        <span class="footer-link-dot">•</span>
+        <a href="/contact" class="footer-nav-link">Contact</a>
+      </nav>
+
+      <div class="footer-copyright">
+        &copy; 2026 VIPRow. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Menu Drawer Handler
+    (function () {
+      const toggleBtn = document.getElementById('mobileMenuToggle');
+      const drawer = document.getElementById('mobileNavDrawer');
+      const backdrop = document.getElementById('mobileDrawerBackdrop');
+      const closeBtn = document.getElementById('mobileDrawerClose');
+
+      if (!toggleBtn || !drawer) return;
+
+      function openDrawer() {
+        toggleBtn.classList.add('active');
+        drawer.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDrawer() {
+        toggleBtn.classList.remove('active');
+        drawer.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      toggleBtn.addEventListener('click', () => {
+        if (drawer.classList.contains('open')) closeDrawer();
+        else openDrawer();
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+      if (backdrop) backdrop.addEventListener('click', closeDrawer);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+      });
+    })();
+  </script>
+
+  <!-- Active Site Host Hydration -->
+  <script>
+    (function () {
+      if (window.location.hostname) {
+        var host = window.location.hostname;
+        document.querySelectorAll('.active-site-host').forEach(function (el) {
+          el.textContent = host;
+        });
+        var emailLink = document.getElementById('contactEmailLink');
+        if (emailLink) {
+          emailLink.href = 'mailto:contact@' + host;
+        }
+      }
+    })();
+  </script>
+
+</body>
+</html>
