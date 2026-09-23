@@ -1,88 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
 <url>
-  <loc>/</loc>
+  <loc>https://side1.info/</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/terms-of-service</loc>
+  <loc>https://side1.info/terms-of-service</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/privacy-policy</loc>
+  <loc>https://side1.info/privacy-policy</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/dmca</loc>
+  <loc>https://side1.info/dmca</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/contact</loc>
+  <loc>https://side1.info/contact</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=NFL</loc>
+  <loc>https://side1.info/?sport=NFL</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=NBA</loc>
+  <loc>https://side1.info/?sport=NBA</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=WNBA</loc>
+  <loc>https://side1.info/?sport=WNBA</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=MLB</loc>
+  <loc>https://side1.info/?sport=MLB</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=NHL</loc>
+  <loc>https://side1.info/?sport=NHL</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=CFL</loc>
+  <loc>https://side1.info/?sport=CFL</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=CFB</loc>
+  <loc>https://side1.info/?sport=CFB</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=NCAAB</loc>
+  <loc>https://side1.info/?sport=NCAAB</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=UFC</loc>
+  <loc>https://side1.info/?sport=UFC</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=BOXING</loc>
+  <loc>https://side1.info/?sport=BOXING</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=SOCCER</loc>
+  <loc>https://side1.info/?sport=SOCCER</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 <url>
-  <loc>/?sport=F1</loc>
+  <loc>https://side1.info/?sport=F1</loc>
   <changefreq>daily</changefreq>
-  <lastmod>2026-09-17</lastmod>
+  <lastmod>2026-09-23</lastmod>
 </url>
 </urlset>
