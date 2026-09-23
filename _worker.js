@@ -146,6 +146,23 @@ export default {
       }
     }
 
+    // 2.5. Handle Static Clean URLs for Policy & Info Pages
+    const cleanStaticPages = {
+      '/terms-of-service': '/terms-of-service.html',
+      '/privacy-policy': '/privacy-policy.html',
+      '/dmca': '/dmca.html',
+      '/contact': '/contact.html'
+    };
+    const normPath = pathname.replace(/\/$/, '');
+    if (cleanStaticPages[normPath]) {
+      try {
+        const assetUrl = new URL(cleanStaticPages[normPath], url.origin);
+        return await env.ASSETS.fetch(assetUrl);
+      } catch (e) {
+        return env.ASSETS.fetch(request);
+      }
+    }
+
     // 3. Handle Root / Index page: Server-side embed schedule data
     if (pathname === '/' || pathname === '/index.html' || pathname === '') {
       try {
