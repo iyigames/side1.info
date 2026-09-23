@@ -103,6 +103,7 @@
         if (parts[0] === 'play') {
           var teams2 = parts[1] || 'match';
           var id2 = parts[2] || '';
+          var serverParam = new URLSearchParams(s).get('server');
           var cleanPlayPath = '/play/' + encodeURIComponent(teams2) + '/' + encodeURIComponent(id2) +
                    (serverParam ? '?server=' + encodeURIComponent(serverParam) : '');
 
@@ -143,7 +144,7 @@
               document.close();
             })
             .catch(function () {
-              window.location.replace('/');
+              window.location.replace('/' + parts[0] + '.html');
             });
           return;
         }
