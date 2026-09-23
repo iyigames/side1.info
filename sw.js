@@ -1,5 +1,5 @@
-// VIPRow Service Worker - Local & Offline SPA Router (Version: 2.5)
-const SW_VERSION = 'v2.5-hidden-api';
+// VIPRow Service Worker - Local & Offline SPA Router (Version: 2.6)
+const SW_VERSION = 'v2.6-fix-footer-pages';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
@@ -134,10 +134,16 @@ self.addEventListener('fetch', (event) => {
 
   // Intercept clean static policy & info pages
   const staticPages = ['/privacy-policy', '/terms-of-service', '/dmca', '/contact'];
-  if (staticPages.includes(pathname)) {
+  const normPath = pathname.replace(/\/$/, '');
+  if (staticPages.includes(normPath)) {
     event.respondWith(
-      fetch(pathname + '.html')
-        .catch(() => caches.match(pathname + '.html'))
+      fetch(event.request)
+        .then((res) => {
+          if (res.ok) return res;
+          return fetch(normPath + '.html');
+        })
+        .catch(() => caches.match(normPath + '.html'))
+        .catch(() => caches.match(event.request))
     );
     return;
   }
