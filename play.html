@@ -12,17 +12,15 @@
       var p = window.location.pathname;
       var params = new URLSearchParams(window.location.search);
       var id = params.get('id');
-      var isPlayerDomain = window.location.hostname.includes('pages.dev');
-      var mainSiteUrl = isPlayerDomain ? '/' : '/';
 
-      if (p.endsWith('play.html') || p.endsWith('player.html') || p.endsWith('/play') || p === '/play' || (isPlayerDomain && p === '/')) {
+      if (p.endsWith('play.html') || p.endsWith('player.html') || p.endsWith('/play') || p === '/play') {
         if (id) {
           var teams = (params.get('teams') || 'match').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'match';
           var server = params.get('server');
           var target = '/play/' + encodeURIComponent(teams) + '/' + encodeURIComponent(id) + (server ? '?server=' + encodeURIComponent(server) : '');
           window.history.replaceState(null, '', target);
-        } else if (p.endsWith('play.html') || p.endsWith('player.html') || p.endsWith('/play') || p === '/play' || (isPlayerDomain && p === '/')) {
-          window.location.replace(mainSiteUrl);
+        } else {
+          window.location.replace('/');
         }
       }
     })();
