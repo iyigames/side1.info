@@ -107,13 +107,7 @@
           var cleanPlayPath = '/play/' + encodeURIComponent(teams2) + '/' + encodeURIComponent(id2) +
                    (serverParam ? '?server=' + encodeURIComponent(serverParam) : '');
 
-          // If visited on the main domain, redirect immediately to dedicated player domain
-          if (!window.location.hostname.includes('pages.dev')) {
-            window.location.replace('' + cleanPlayPath);
-            return;
-          }
-
-          // On dedicated player domain: Load player page in-place without changing the clean URL
+          // Load player page in-place without changing the clean URL
           fetch('/play.html')
             .then(function (res) {
               if (!res.ok) throw new Error('player fetch failed');
@@ -125,7 +119,7 @@
               document.close();
             })
             .catch(function () {
-              window.location.replace(cleanPlayPath);
+              window.location.replace('/play.html?teams=' + encodeURIComponent(teams2) + '&id=' + encodeURIComponent(id2) + (serverParam ? '&server=' + encodeURIComponent(serverParam) : ''));
             });
           return;
         }
