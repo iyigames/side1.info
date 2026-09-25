@@ -7,6 +7,18 @@ const PLAYER_DOMAIN = (typeof window !== 'undefined' && window.PLAYER_DOMAIN)
   : '';
 const urlParams = new URLSearchParams(window.location.search);
 
+// Dynamic player URL resolver with local dev fallback
+function getPlayerUrl(teamsSlug, matchId, serverNum) {
+  const isLocalStatic = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+  const hasServiceWorker = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
+  // On local static server without active SW: use query param fallback so play.html loads directly
+  if (isLocalStatic && !hasServiceWorker && !PLAYER_DOMAIN) {
+    return `/play.html?teams=${encodeURIComponent(teamsSlug)}&id=${encodeURIComponent(matchId)}${serverNum && serverNum > 1 ? '&server=' + encodeURIComponent(serverNum) : ''}`;
+  }
+  // Production (Cloudflare/Vercel) or local with SW active: use clean slug URL
+  return `${PLAYER_DOMAIN}/play/${encodeURIComponent(teamsSlug)}/${encodeURIComponent(matchId)}${serverNum && serverNum > 1 ? '?server=' + encodeURIComponent(serverNum) : ''}`;
+}
+
 // Dynamic fallback endpoint resolver (keeps upstream provider private and hidden from public search)
 function getSecureScheduleEndpoint() {
   const chunks = ['aHR0cHM6Ly9zcGFuZWx2Mi5h', 'bmRyaGluby5jb20vYXBpL3Yy', 'L2FwcHNjaGVkdWxlYXBp'];
@@ -606,7 +618,7 @@ function renderMatchView(match) {
       watchMatchDateTime.textContent = formatWatchDateTime(match.event_date || match.date, match.event_time);
     }
     if (watchNowBtn) {
-      const playerUrl = `${PLAYER_DOMAIN}/play/${encodeURIComponent(teamsSlug)}/${encodeURIComponent(match.sch_id)}`;
+      const playerUrl = getPlayerUrl(teamsSlug, match.sch_id);
       watchNowBtn.href = playerUrl;
       watchNowBtn.onclick = function (e) {
         window.location.href = playerUrl;
@@ -747,7 +759,7 @@ function renderMatchView(match) {
             <td class="col-bitrate col-hide-tablet"><span style="color:#64748b;font-weight:600;">${escapeHtml(st.bitrate)}</span></td>
             <td class="col-action">
               <a 
-                href="${PLAYER_DOMAIN}/play/${encodeURIComponent(teamsSlug)}/${encodeURIComponent(match.sch_id)}${st.serverNum > 1 ? '?server=' + encodeURIComponent(st.serverNum) : ''}" 
+                href="${getPlayerUrl(teamsSlug, match.sch_id, st.serverNum)}" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 class="btn-streameast-watch" 
