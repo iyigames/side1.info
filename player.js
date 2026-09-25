@@ -2,9 +2,7 @@
  * VIPROW - Dedicated Live Player Page Logic
  */
 
-const MAIN_SITE_URL = (window.location.hostname.includes('pages.dev') || window.location.hostname.includes('viprow'))
-  ? '/'
-  : '';
+const MAIN_SITE_URL = '';
 const urlParams = new URLSearchParams(window.location.search);
 
 // Dynamic fallback endpoint resolver (keeps upstream provider private and hidden from public search)
@@ -437,12 +435,10 @@ function renderPlayerPage(match) {
   }
 
   // Ensure topbar logo & schedule button point back to main site
-  if (MAIN_SITE_URL) {
-    const brandLogo = document.getElementById('brandLogo');
-    if (brandLogo) brandLogo.href = MAIN_SITE_URL + '/';
-    const topbarScheduleBtn = document.getElementById('topbarScheduleBtn');
-    if (topbarScheduleBtn) topbarScheduleBtn.href = MAIN_SITE_URL + '/';
-  }
+  const brandLogo = document.getElementById('brandLogo');
+  if (brandLogo) brandLogo.href = '/';
+  const topbarScheduleBtn = document.getElementById('topbarScheduleBtn');
+  if (topbarScheduleBtn) topbarScheduleBtn.href = '/';
 
   // -- Match info pills below player --
   const pillsBar = document.getElementById('matchInfoPills');
