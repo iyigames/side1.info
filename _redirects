@@ -2,3 +2,5 @@
 /privacy-policy /privacy-policy.html 200
 /dmca /dmca.html 200
 /contact /contact.html 200
+/watch/* /watch.html 200
+/play/* /play.html 200
