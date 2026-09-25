@@ -477,6 +477,16 @@ function processScheduleData(apiDays) {
     'OTHER': { name: 'Other Sports', icon: '🏆' }
   };
 
+  // URL resolver: returns /watch.html?... on local static server (no SW), otherwise /watch/sport/teams/id
+  function getCleanWatchUrl(sSlug, tSlug, mId) {
+    const isLocalStatic = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+    const hasServiceWorker = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
+    if (isLocalStatic && !hasServiceWorker) {
+      return `/watch.html?sport=${encodeURIComponent(sSlug)}&teams=${encodeURIComponent(tSlug)}&id=${encodeURIComponent(mId)}`;
+    }
+    return `/watch/${encodeURIComponent(sSlug)}/${encodeURIComponent(tSlug)}/${encodeURIComponent(mId)}`;
+  }
+
   // Render single match card HTML (Clean Simple StreamHub Style)
   function renderMatchCard(m) {
     const sportLabel = (m.sportCategory || m.rawSport || 'SPORTS').toUpperCase();
@@ -488,9 +498,10 @@ function processScheduleData(apiDays) {
       ? `<span class="simple-live-badge"><span class="live-dot-ping"></span>LIVE</span>`
       : '';
 
+
     const sportSlug = (m.rawSport || m.sportCategory || 'sports').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'sports';
     const teamsSlug = (m.teams || 'match').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'match';
-    const cleanWatchUrl = `/watch/${encodeURIComponent(sportSlug)}/${encodeURIComponent(teamsSlug)}/${encodeURIComponent(m.id)}`;
+    const cleanWatchUrl = getCleanWatchUrl(sportSlug, teamsSlug, m.id);
 
     return `
     <a href="${cleanWatchUrl}" class="streamhub-match-card" data-match-id="${escapeHtml(String(m.id))}" onclick="if(!event.ctrlKey && !event.metaKey && event.button === 0){ event.preventDefault(); goToMatch('${escapeHtml(String(m.id))}', '${escapeHtml(m.rawSport || m.sportCategory || 'sports')}', '${escapeHtml(m.teams || 'match')}'); }">
@@ -655,7 +666,7 @@ function processScheduleData(apiDays) {
     }
     const sportSlug = (matchSport || 'sports').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'sports';
     const teamsSlug = (matchTeams || 'match').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'match';
-    window.location.href = `/watch/${encodeURIComponent(sportSlug)}/${encodeURIComponent(teamsSlug)}/${encodeURIComponent(matchId)}`;
+    window.location.href = getCleanWatchUrl(sportSlug, teamsSlug, matchId);
   };
   window.goToMatch = window.openMatchDetail;
 
