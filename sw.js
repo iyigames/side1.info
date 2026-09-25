@@ -1,5 +1,5 @@
-// VIPRow Service Worker - Local & Offline SPA Router (Version: 2.6)
-const SW_VERSION = 'v2.6-fix-footer-pages';
+// VIPRow Service Worker - Local & Offline SPA Router (Version: 2.7)
+const SW_VERSION = 'v2.7-fix-play-routing';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
@@ -91,6 +91,71 @@ async function handleWatchRoute(event) {
   });
 }
 
+async function handlePlayRoute(event) {
+  const url = new URL(event.request.url);
+  const pathname = url.pathname;
+  const isLocalStatic = self.location.hostname === '127.0.0.1' || self.location.hostname === 'localhost';
+
+  // In production (Cloudflare), try the edge server first for SSR response
+  if (!isLocalStatic) {
+    try {
+      const serverRes = await fetch(event.request);
+      if (serverRes.ok) {
+        return serverRes;
+      }
+    } catch (e) {}
+  }
+
+  // On local servers (e.g. VS Code Live Server 127.0.0.1:5500) or edge fallback:
+  // Fetch /play.html and dynamically inject the SEO meta tags!
+  let htmlRes;
+  try {
+    htmlRes = await fetch('/play.html');
+    if (!htmlRes.ok) throw new Error('play.html fetch failed');
+  } catch (err) {
+    htmlRes = await caches.match('/play.html');
+  }
+
+  if (!htmlRes) {
+    return new Response('Page not found', { status: 404 });
+  }
+
+  let html = await htmlRes.text();
+
+  const pathParts = pathname.split('/').filter(Boolean);
+  const playIdx = pathParts.indexOf('play');
+  const parts = playIdx !== -1 ? pathParts.slice(playIdx + 1) : [];
+
+  let teams = '';
+  if (parts.length >= 1 && !/^\d+$/.test(parts[0])) {
+    teams = parts[0];
+  }
+  if (!teams || teams === 'match') {
+    teams = url.searchParams.get('teams') || '';
+  }
+
+  if (teams && teams !== 'match') {
+    const teamName = formatTeamName(teams);
+    const fullTitle = `Watch ${teamName} Live Stream - VIPRow`;
+    const fullDesc = `Watch ${teamName} Live Stream Free in HD`;
+
+    html = html
+      .replace(/<title>[\s\S]*?<\/title>/i, () => `<title>${fullTitle}</title>`)
+      .replace(/<meta\s+[^>]*name=["']description["'][^>]*>/i, () => `<meta name="description" content="${fullDesc}">`)
+      .replace(/<meta\s+[^>]*property=["']og:title["'][^>]*>/i, () => `<meta property="og:title" content="${fullTitle}">`)
+      .replace(/<meta\s+[^>]*property=["']og:description["'][^>]*>/i, () => `<meta property="og:description" content="${fullDesc}">`)
+      .replace(/<meta\s+[^>]*name=["']twitter:title["'][^>]*>/i, () => `<meta name="twitter:title" content="${fullTitle}">`)
+      .replace(/<meta\s+[^>]*name=["']twitter:description["'][^>]*>/i, () => `<meta name="twitter:description" content="${fullDesc}">`);
+  }
+
+  return new Response(html, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8'
+    }
+  });
+}
+
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
@@ -113,22 +178,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Intercept /play/* routes:
-  // On player domain, serve /play.html directly (which returns play.html with 200 OK)
-  if (pathname.startsWith('/play/')) {
-    if (self.location.hostname.includes('pages.dev')) {
-      event.respondWith(
-        fetch('/play.html')
-          .then((res) => {
-            if (!res.ok) throw new Error('Player route failed');
-            return res;
-          })
-          .catch(() => caches.match('/play.html'))
-          .catch(() => fetch(event.request))
-      );
-      return;
-    }
-    // On main domain, pass through to let 404.html handle cross-domain redirect safely
+  // Intercept /play/* routes: serve with dynamic meta tags in both local dev (Live Server) and production
+  if (pathname.startsWith('/play/') || pathname === '/play') {
+    event.respondWith(handlePlayRoute(event));
     return;
   }
 
