@@ -5,19 +5,53 @@
 const MAIN_SITE_URL = '';
 const urlParams = new URLSearchParams(window.location.search);
 
-// Dynamic fallback endpoint resolver (keeps upstream provider private and hidden from public search)
-function getSecureScheduleEndpoint() {
-  const chunks = ['aHR0cHM6Ly9zcGFuZWx2Mi5h', 'bmRyaGluby5jb20vYXBpL3Yy', 'L2FwcHNjaGVkdWxlYXBp'];
+// Schedule Cipher Key for encrypted binary stream payload protection
+const _VIP_CIPHER_KEY = [0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x48, 0x75, 0x62, 0x5f, 0x56, 0x49, 0x50, 0x32, 0x36, 0x21];
+
+function decodeScheduleBytes(bytes) {
+  if (!bytes || !bytes.length) return [];
+  if (bytes[0] === 0x5b || bytes[0] === 0x7b) {
+    try { return JSON.parse(new TextDecoder().decode(bytes)); } catch (e) { }
+  }
+  const dec = new Uint8Array(bytes);
+  for (let i = 0; i < dec.length; i++) {
+    dec[i] ^= _VIP_CIPHER_KEY[i % _VIP_CIPHER_KEY.length];
+  }
   try {
-    return atob(chunks.join(''));
+    return JSON.parse(new TextDecoder().decode(dec));
   } catch (e) {
-    return '';
+    return [];
+  }
+}
+
+function decodeScheduleString(raw) {
+  if (!raw || !raw.trim()) return [];
+  const str = raw.trim();
+  if (str.startsWith('[') || str.startsWith('{')) {
+    try { return JSON.parse(str); } catch (e) { return []; }
+  }
+  try {
+    const binary = atob(str);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return decodeScheduleBytes(bytes);
+  } catch (e) {
+    return [];
   }
 }
 
 // Check if data contains today or future dates (rejects stale caches like yesterday's games)
 function isDataFresh(apiDays) {
   if (!Array.isArray(apiDays) || apiDays.length === 0) return false;
+  const isLocal = typeof window !== 'undefined' && (
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === 'localhost' ||
+    window.location.protocol === 'file:'
+  );
+  if (isLocal) return true;
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -37,11 +71,17 @@ async function stealthFetchJson(url, options = {}) {
     try {
       const data = await new Promise((resolve, reject) => {
         const workerCode = `
+          const _K = [0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x48, 0x75, 0x62, 0x5f, 0x56, 0x49, 0x50, 0x32, 0x36, 0x21];
           self.onmessage = async (e) => {
             try {
               const res = await fetch(e.data.url, e.data.options);
               if (!res.ok) throw new Error('HTTP ' + res.status);
-              const json = await res.json();
+              const buf = await res.arrayBuffer();
+              const b = new Uint8Array(buf);
+              if (b.length > 0 && b[0] !== 0x5b && b[0] !== 0x7b) {
+                for (let i = 0; i < b.length; i++) b[i] ^= _K[i % _K.length];
+              }
+              const json = JSON.parse(new TextDecoder().decode(b));
               self.postMessage({ ok: true, data: json });
             } catch (err) {
               self.postMessage({ ok: false, error: err.message });
@@ -93,8 +133,8 @@ async function stealthFetchJson(url, options = {}) {
       const res = await pristineWin.fetch(url, { ...options, signal: controller.signal, cache: 'no-store' });
       clearTimeout(timeoutId);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      return data;
+      const buf = await res.arrayBuffer();
+      return decodeScheduleBytes(new Uint8Array(buf));
     }
   } catch (frameErr) { } finally {
     if (frame && frame.parentNode) frame.parentNode.removeChild(frame);
@@ -102,7 +142,8 @@ async function stealthFetchJson(url, options = {}) {
 
   const res = await fetch(url, options);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+  const buf = await res.arrayBuffer();
+  return decodeScheduleBytes(new Uint8Array(buf));
 }
 
 // Helper: parse matchId and teams from either pathname (/play/:slug/:id) or query params (?id=...&teams=...)
@@ -233,8 +274,8 @@ async function loadPlayerPage() {
   );
 
   const endpoints = isLocal
-    ? [`/data/schedule.bin?${cacheBust}`, `/schedule_cache.json?${cacheBust}`]
-    : [`/api/schedule?${cacheBust}`, `/data/schedule.bin?${cacheBust}`, `/api/v1/schedule?${cacheBust}`, `/schedule_cache.json?${cacheBust}`];
+    ? [`/data/schedule.bin?${cacheBust}`]
+    : [`/api/schedule?${cacheBust}`, `/data/schedule.bin?${cacheBust}`, `/api/v1/schedule?${cacheBust}`];
 
   for (const ep of endpoints) {
     try {
@@ -250,22 +291,6 @@ async function loadPlayerPage() {
     } catch (e) { }
   }
 
-  // Direct secure fallback (works on local dev e.g. Live Server or when proxy fails)
-  if (!loaded) {
-    const secureFallback = getSecureScheduleEndpoint();
-    if (secureFallback) {
-      try {
-        const data = await stealthFetchJson(secureFallback, { timeout: 7000 });
-        if (Array.isArray(data) && data.length > 0 && isDataFresh(data)) {
-          try {
-            localStorage.setItem('VIP_SCHEDULE_CACHE', JSON.stringify(data));
-          } catch (e) { }
-          findAndInitializeMatch(data);
-          loaded = true;
-        }
-      } catch (e) { }
-    }
-  }
 
   // Final fallback to static cache file
   if (!loaded) {
