@@ -62,9 +62,31 @@ function serializeForScript(data) {
   return JSON.stringify(data).replace(/</g, '\\u003c');
 }
 
+const _VIP_CIPHER_KEY = [0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x48, 0x75, 0x62, 0x5f, 0x56, 0x49, 0x50, 0x32, 0x36, 0x21];
+
+function encryptSchedulePayload(data) {
+  const str = JSON.stringify(data || []);
+  const encoder = new TextEncoder();
+  const bytes = encoder.encode(str);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] ^= _VIP_CIPHER_KEY[i % _VIP_CIPHER_KEY.length];
+  }
+  return bytes;
+}
+
+function encryptScheduleToBase64(data) {
+  const bytes = encryptSchedulePayload(data);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
 function injectScheduleScript(html, scheduleData) {
   if (!scheduleData || !Array.isArray(scheduleData) || scheduleData.length === 0) return html;
-  const dataScript = `<script id="__VIP_DATA__" type="application/json">${serializeForScript(scheduleData)}</script>`;
+  const b64Data = encryptScheduleToBase64(scheduleData);
+  const dataScript = `<script id="__VIP_DATA__" type="text/plain">${b64Data}</script>`;
   
   if (html.includes('id="__VIP_DATA__"')) {
     return html.replace(/<script id="__VIP_DATA__"[\s\S]*?<\/script>/, () => dataScript);
@@ -83,13 +105,14 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // 1. Same-Origin Proxy Endpoint for dynamic schedule sync
-    if (pathname === '/data/schedule.bin' || pathname === '/api/schedule' || pathname === '/api/v1/schedule' || pathname === '/schedule_cache.json') {
+    // 1. Same-Origin Proxy Endpoint for dynamic schedule sync (serves encrypted binary)
+    if (pathname === '/data/schedule.bin' || pathname === '/api/schedule' || pathname === '/api/v1/schedule') {
       const data = await getScheduleData(env);
-      return new Response(JSON.stringify(data || []), {
+      const encryptedBytes = encryptSchedulePayload(data);
+      return new Response(encryptedBytes, {
         status: 200,
         headers: {
-          'Content-Type': 'application/json; charset=utf-8',
+          'Content-Type': 'application/octet-stream',
           'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
           'CDN-Cache-Control': 'no-store',
           'Cloudflare-CDN-Cache-Control': 'no-store',
